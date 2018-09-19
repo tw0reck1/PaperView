@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="PaperView">
+        <attr name="pv_paper_color" format="color"/>
+        <attr name="pv_border_width" format="dimension"/>
+        <attr name="pv_border_color" format="color"/>
+        <attr name="pv_stroke_width" format="dimension"/>
+        <attr name="pv_stroke_color" format="color"/>
+        <attr name="pv_stroke_spacing" format="dimension"/>
+        <attr name="pv_stroke_type">
+            <flag name="none" value="0" />
+            <flag name="horizontal" value="1" />
+            <flag name="vertical" value="2" />
+            <flag name="grid" value="3" />
+        </attr>
+    </declare-styleable>
+
+    <declare-styleable name="SketchyPaperView">
+        <attr name="spv_sketch_stroke_width" format="dimension"/>
+        <attr name="spv_sketch_stroke_color" format="color"/>
+    </declare-styleable>
+
+</resources>
