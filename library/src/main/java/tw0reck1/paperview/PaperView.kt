@@ -16,10 +16,13 @@
 package tw0reck1.paperview
 
 import android.content.Context
-import android.graphics.*
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.Paint
 import android.util.AttributeSet
 import android.view.View
-import android.util.TypedValue
+import tw0reck1.paperview.PaperUtils.dpToPx
 
 open class PaperView : View {
 
@@ -43,12 +46,6 @@ open class PaperView : View {
         const val DEFAULT_STROKE_TYPE = Type.NONE
 
         const val UNSET_SIZE = -1f
-
-        private fun dpToPx(context: Context, dp: Float): Float {
-            return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp,
-                    context.resources.displayMetrics)
-        }
-
     }
 
     private var paperColor = DEFAULT_PAPER_COLOR
@@ -63,32 +60,58 @@ open class PaperView : View {
 
     private var paperBitmap: Bitmap? = null
 
-    constructor(context: Context) : super(context)
+    constructor(
+        context: Context
+    ) : super(context) {
+        initDefaultAttributes()
+    }
 
-    constructor(context: Context, attrs: AttributeSet?) : super(context, attrs) {
+    constructor(
+        context: Context,
+        attrs: AttributeSet?
+    ) : super(context, attrs) {
         initAttributes(context, attrs, 0)
     }
 
-    constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int)
-            : super(context, attrs, defStyleAttr) {
+    constructor(
+        context: Context,
+        attrs: AttributeSet?,
+        defStyleAttr: Int
+    ) : super(context, attrs, defStyleAttr) {
         initAttributes(context, attrs, defStyleAttr)
     }
 
+    private fun initDefaultAttributes() {
+        borderWidth = context.dpToPx(DEFAULT_BORDER_WIDTH)
+        strokeWidth = context.dpToPx(DEFAULT_STROKE_WIDTH)
+        strokeSpacing = context.dpToPx(DEFAULT_STROKE_SPACING)
+    }
+
     private fun initAttributes(context: Context, attrs: AttributeSet?, defStyleAttr: Int) {
-        val array = context.theme.obtainStyledAttributes(attrs,
-                R.styleable.PaperView, defStyleAttr, 0)
+        val array = context.theme.obtainStyledAttributes(
+            attrs,
+            R.styleable.PaperView,
+            defStyleAttr,
+            0
+        )
 
         paperColor = array.getColor(R.styleable.PaperView_pv_paper_color, DEFAULT_PAPER_COLOR)
 
-        borderWidth = array.getDimension(R.styleable.PaperView_pv_border_width,
-                dpToPx(context, DEFAULT_BORDER_WIDTH))
+        borderWidth = array.getDimension(
+            R.styleable.PaperView_pv_border_width,
+            context.dpToPx(DEFAULT_BORDER_WIDTH)
+        )
         borderColor = array.getColor(R.styleable.PaperView_pv_border_color, DEFAULT_BORDER_COLOR)
 
-        strokeWidth = array.getDimension(R.styleable.PaperView_pv_stroke_width,
-                dpToPx(context, DEFAULT_STROKE_WIDTH))
+        strokeWidth = array.getDimension(
+            R.styleable.PaperView_pv_stroke_width,
+            context.dpToPx(DEFAULT_STROKE_WIDTH)
+        )
         strokeColor = array.getColor(R.styleable.PaperView_pv_stroke_color, DEFAULT_STROKE_COLOR)
-        strokeSpacing = array.getDimension(R.styleable.PaperView_pv_stroke_spacing,
-                dpToPx(context, DEFAULT_STROKE_SPACING))
+        strokeSpacing = array.getDimension(
+            R.styleable.PaperView_pv_stroke_spacing,
+            context.dpToPx(DEFAULT_STROKE_SPACING)
+        )
         strokeType = array.getInteger(R.styleable.PaperView_pv_stroke_type, DEFAULT_STROKE_TYPE)
 
         array.recycle()
@@ -139,17 +162,15 @@ open class PaperView : View {
 
             val offset = linePaint.strokeWidth / 2f
 
-            canvas.drawRect(offset, offset, bitmapWidth - offset,
-                    bitmapHeight - offset, linePaint)
+            canvas.drawRect(offset, offset, bitmapWidth - offset, bitmapHeight - offset, linePaint)
         }
 
         return bitmap
     }
 
-    override fun onDraw(canvas: Canvas?) {
-        paperBitmap?.let {
-            canvas?.drawBitmap(it, paddingLeft.toFloat(), paddingTop.toFloat(), null)
+    override fun onDraw(canvas: Canvas) {
+        paperBitmap?.let { bitmap ->
+            canvas.drawBitmap(bitmap, paddingLeft.toFloat(), paddingTop.toFloat(), null)
         }
     }
-
 }
